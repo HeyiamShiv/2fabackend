@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id       Int      @id @default(autoincrement())
+  name          String?
+  email         String   @unique
+  password      String?
+  created_at    DateTime @default(now())
+  emailVerified Boolean  @default(false)
+  enabled_2fa Boolean  @default(false)
+}
+
+model OTP {
+  otp_id       Int      @id @default(autoincrement())
+  code         String   // The OTP code
+  expiresAt    DateTime // Expiry timestamp
+  verified     Boolean  @default(false)
+  
+  email        String
+
+  created_at   DateTime @default(now())
+}
